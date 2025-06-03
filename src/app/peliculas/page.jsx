@@ -6,7 +6,7 @@ import Link from "next/link";
 const API_KEY = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYmVjNjg5ZjgxNzI4ZmNhZTk3YjVhMzA3ZmI5MDY1ZiIsIm5iZiI6MTc0ODg5MDkxMC4yNjcsInN1YiI6IjY4M2RmNTFlOTk0ZTgxMjZiZTdiYWQ1YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.hX6v3Osd5za6V2f6erPhFHxshgkcwhjhPcA1aZpMt38";
 
 async function fetchPopularMovies() {
-  const res = await fetch('https://api.themoviedb.org/3/movie/popular', {
+  const res = await fetch('https://api.themoviedb.org/3/movie/popular?language=es-ES', {
     method: 'GET',
     headers: {
       accept: 'application/json',
@@ -19,7 +19,7 @@ async function fetchPopularMovies() {
 }
 
 async function fetchMovieDetails(id) {
-  const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?append_to_response=credits`, {
+  const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?append_to_response=credits&language=es-ES`, {
     method: 'GET',
     headers: {
       accept: 'application/json',
@@ -35,24 +35,49 @@ export default function MovieExplorer() {
   const [movies, setMovies] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  // Cargar películas populares al montar
+  // Cargar películas populares al clicar
   useEffect(() => {
-    fetchPopularMovies().then(data => setMovies(data.results.slice(0, 6)));
+    fetchPopularMovies().then(data => setMovies(data.results.slice(0, 9)));
   }, []);
 
-
+  // Cargar detalles cndo cambia el id seleccionado-->
+  useEffect(() => {
+    if (selectedId) {
+      fetchMovieDetails(selectedId)
+        .then(data => {
+          setSelectedMovie(data);
+        });
+    }
+  }, [selectedId]);
 
   return (
     <div className="flex min-h-screen gap-8 p-8">
-
-      {/* Panel izquierdo: Detalles */}
       
+      {/* Panel izquierdo: Lista de películas */}
+
+      <div className="w-1/2 flex flex-wrap justify-center items-start gap-8">
+        {movies.map((movie) => (
+          <button
+            key={movie.id}
+            onClick={() => setSelectedId(movie.id)}
+            className={`w-60 bg-white rounded-lg shadow-lg flex flex-col items-center p-4 hover:shadow-2xl transition-shadow duration-300 border-2 ${
+              selectedId === movie.id ? "border-blue-500" : "border-transparent"
+            }`}
+          >
+            <img
+              src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+              alt={movie.title}
+              className="w-full h-72 object-cover rounded-md"
+            />
+            <h2 className="text-lg font-bold mt-4 text-black text-center">{movie.title}</h2>
+          </button>
+        ))}
+      </div>
+      {/* Panel derecho: Detalles */}
       <div className="w-1/2 bg-white/80 rounded-lg shadow-lg p-6 flex flex-col items-center">
-        {!selectedMovie && <div className="text-gray-500">Selecciona una película</div>}
-        {loading && <div>Cargando detalles...</div>}
-        {selectedMovie && !loading && (
+        {!selectedMovie && <div className="text-gray-500 text-4xl mt-50">Selecciona una película</div>}
+        {selectedMovie  && (
           <>
             <h1 className="text-2xl font-bold mb-2 text-black">{selectedMovie.title}</h1>
             <img
@@ -75,7 +100,13 @@ export default function MovieExplorer() {
               <div className="flex gap-2 mt-2">
                 {selectedMovie.credits?.cast?.slice(0, 5).map(actor => (
                   <div key={actor.id} className="flex flex-col items-center w-20">
-                    
+                    {actor.profile_path && (
+                      <img
+                        src={`https://image.tmdb.org/t/p/w185/${actor.profile_path}`}
+                        alt={actor.name}
+                        className="w-16 h-16 object-cover rounded-full mb-1 border"
+                      />
+                    )}
                     {!actor.profile_path && (
                       <div className="w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center mb-1 text-xs">
                         Sin foto
@@ -88,25 +119,6 @@ export default function MovieExplorer() {
             </div>
           </>
         )}
-      </div>
-      {/* Panel derecho: Lista de películas */}
-      <div className="w-1/2 flex flex-wrap justify-center items-start gap-8">
-        {movies.map((movie) => (
-          <button
-            key={movie.id}
-            onClick={() => setSelectedId(movie.id)}
-            className={`w-60 bg-white rounded-lg shadow-lg flex flex-col items-center p-4 hover:shadow-2xl transition-shadow duration-300 border-2 ${
-              selectedId === movie.id ? "border-blue-600" : "border-transparent"
-            }`}
-          >
-            <img
-              src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-              alt={movie.title}
-              className="w-full h-72 object-cover rounded-md"
-            />
-            <h2 className="text-lg font-bold mt-4 text-black text-center">{movie.title}</h2>
-          </button>
-        ))}
       </div>
     </div>
   );

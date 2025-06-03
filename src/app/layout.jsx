@@ -1,4 +1,4 @@
-import "./globals.css"; // Asegúrate que existe o cámbialo según tu css global
+import "./globals.css"; 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -11,7 +11,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es">
       <body>
-        {/* Fondo global en blanco y negro con blur */}
+        
         <div className="fixed inset-0 w-screen h-screen overflow-hidden -z-10">
           <div
             className="absolute inset-0 bg-cover bg-center grayscale"

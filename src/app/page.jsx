@@ -1,11 +1,12 @@
-import ApiPage from "./peliculas/page";
+import MovieExplorer from "./peliculas/page";
+
 
 
 export default function Home() {
   return (
     <div className="flex justify-center items-center h-full text-white">
       
-      <ApiPage />
+      <MovieExplorer />
     </div>
   );
 }
