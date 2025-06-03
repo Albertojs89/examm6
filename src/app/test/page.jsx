@@ -42,7 +42,17 @@ export default function MovieExplorer() {
     fetchPopularMovies().then(data => setMovies(data.results.slice(0, 6)));
   }, []);
 
-
+  // Cargar detalles cuando cambia el id seleccionado
+  useEffect(() => {
+    if (selectedId) {
+      setLoading(true);
+      fetchMovieDetails(selectedId)
+        .then(data => {
+          setSelectedMovie(data);
+          setLoading(false);
+        });
+    }
+  }, [selectedId]);
 
   return (
     <div className="flex min-h-screen gap-8 p-8">
@@ -75,7 +85,13 @@ export default function MovieExplorer() {
               <div className="flex gap-2 mt-2">
                 {selectedMovie.credits?.cast?.slice(0, 5).map(actor => (
                   <div key={actor.id} className="flex flex-col items-center w-20">
-                    
+                    {actor.profile_path && (
+                      <img
+                        src={`https://image.tmdb.org/t/p/w185/${actor.profile_path}`}
+                        alt={actor.name}
+                        className="w-16 h-16 object-cover rounded-full mb-1 border"
+                      />
+                    )}
                     {!actor.profile_path && (
                       <div className="w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center mb-1 text-xs">
                         Sin foto
