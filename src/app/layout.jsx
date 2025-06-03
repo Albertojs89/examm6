@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 
 export const metadata = {
   title: "NextAPI",
-  description: "Mi proyecto de práctica",
+  description: "Mi proyecto de examen",
 };
 
 export default function RootLayout({ children }) {
@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
 
         {/* Contenido dinámico */}
         {children}
-
+        
         <Footer />
       </body>
     </html>

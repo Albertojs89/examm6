@@ -1,4 +1,4 @@
-import ApiPage from "./api/page";
+import ApiPage from "./peliculas/page";
 
 
 export default function Home() {

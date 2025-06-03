@@ -6,7 +6,8 @@ export default function AboutPage() {
     <div className="relative w-screen h-screen overflow-hidden">
       <Header />
       <div className="flex justify-center items-center h-full text-white">
-        <h2 className="text-4xl">Vista de About</h2>
+        <h2 className="text-4xl">Crea una web que, mitjançant l’API ‘The Movie Database (TMDB)’ et permeti mostrar les pel·lícules populars de la seva base de dades.
+        </h2>
       </div>
       <Footer />
     </div>

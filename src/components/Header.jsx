@@ -9,6 +9,9 @@ export default function Header() {
       <Link href="/about">
         <button className="px-4 py-2 bg-white/10 rounded hover:bg-white/20">About </button>
       </Link>
+      <Link href="/">
+        <button className="px-4 py-2 bg-white/10 rounded hover:bg-white/20">Alberto Jiménez</button>
+      </Link>
       
     </header>
   );
