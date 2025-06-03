@@ -35,7 +35,11 @@ export default function MovieExplorer() {
   const [movies, setMovies] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [favorites, setFavorites] = useState([]); //localstorage para las favs
 
+
+  // Cargar películas populares al iniciar
+  
   // Cargar películas populares al clicar
   useEffect(() => {
     fetchPopularMovies().then(data => setMovies(data.results.slice(0, 9)));
@@ -97,18 +101,21 @@ export default function MovieExplorer() {
             </div>
             <div className="mb-2 text-sm text-gray-600 flex flex-col items-start">
               <strong>Reparto:</strong>
-              <div className="flex gap-2 mt-2">
+              <div className="flex gap-4 mt-2">
                 {selectedMovie.credits?.cast?.slice(0, 5).map(actor => (
-                  <div key={actor.id} className="flex flex-col items-center w-20">
-                    {actor.profile_path && (
+                  <div key={actor.id} className="flex flex-col items-center w-32">
+                    {actor.profile_path ? (
                       <img
                         src={`https://image.tmdb.org/t/p/w185/${actor.profile_path}`}
                         alt={actor.name}
-                        className="w-16 h-16 object-cover rounded-full mb-1 border"
+                        className="w-28 h-36 object-cover mb-1 border"
+                        style={{ borderRadius: "0" }} // cuadrado
                       />
-                    )}
-                    {!actor.profile_path && (
-                      <div className="w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center mb-1 text-xs">
+                    ) : (
+                      <div
+                        className="w-28 h-36 bg-gray-300 flex items-center justify-center mb-1 text-xs"
+                        style={{ borderRadius: "0" }}
+                      >
                         Sin foto
                       </div>
                     )}
